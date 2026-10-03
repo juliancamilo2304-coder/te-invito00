@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>TE INVITO</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    body {
+        min-height: 100vh;
+        background: radial-gradient(circle at top, #4b176b, #180720 70%);
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+    }
+
+    .contenedor {
+        width: 100%;
+        max-width: 650px;
+        background: rgba(30, 8, 42, 0.95);
+        border: 1px solid #7d3ba8;
+        border-radius: 25px;
+        padding: 35px;
+        text-align: center;
+        box-shadow: 0 0 35px rgba(142, 58, 190, 0.35);
+    }
+
+    h1 {
+        font-size: 42px;
+        letter-spacing: 5px;
+        margin-bottom: 10px;
+        color: #e8b8ff;
+        text-shadow: 0 0 15px #9b42c7;
+    }
+
+    .subtitulo {
+        color: #cda9d9;
+        margin-bottom: 30px;
+        font-size: 15px;
+    }
+
+    .progreso {
+        color: #b875d6;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    .pregunta {
+        font-size: 23px;
+        margin-bottom: 25px;
+        line-height: 1.4;
+    }
+
+    .opciones {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .opcion {
+        background: #351047;
+        color: white;
+        border: 1px solid #743b91;
+        border-radius: 12px;
+        padding: 15px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: 0.25s;
+    }
+
+    .opcion:hover {
+        background: #55206c;
+        transform: translateY(-2px);
+        box-shadow: 0 0 15px rgba(183, 94, 220, 0.3);
+    }
+
+    .pista {
+        margin-top: 20px;
+        background: transparent;
+        color: #d69cf3;
+        border: 1px solid #8f4eaf;
+        border-radius: 10px;
+        padding: 10px 18px;
+        cursor: pointer;
+        transition: 0.2s;
+    }
+
+    .pista:hover {
+        background: #351047;
+    }
+
+    #mensaje {
+        margin-top: 18px;
+        min-height: 25px;
+        font-size: 15px;
+    }
+
+    .incorrecto {
+        color: #ff8d9d;
+    }
+
+    .correcto {
+        color: #9effb1;
+    }
+
+    #textoPista {
+        margin-top: 12px;
+        color: #cda9d9;
+        font-style: italic;
+        display: none;
+    }
+
+    .final {
+        display: none;
+    }
+
+    .final h2 {
+        color: #e8b8ff;
+        font-size: 32px;
+        margin-bottom: 25px;
+    }
+
+    .frase {
+        font-size: 28px;
+        font-weight: bold;
+        color: white;
+        margin: 25px 0;
+        line-height: 1.4;
+        text-shadow: 0 0 12px #a74bd0;
+    }
+
+    .datos {
+        background: #32103f;
+        border-radius: 15px;
+        padding: 20px;
+        margin-top: 20px;
+        line-height: 2;
+        color: #e6c9ef;
+    }
+
+    .propuesta {
+        display: none;
+    }
+
+    .propuesta h2 {
+        color: #e8b8ff;
+        font-size: 30px;
+        margin-bottom: 20px;
+    }
+
+    .propuesta p {
+        color: #d6b6df;
+        line-height: 1.7;
+        font-size: 17px;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="contenedor">
+
+    <!-- INTRO -->
+    <div id="inicio">
+        <h1>TE INVITO</h1>
+
+        <p class="subtitulo">
+            Hay algo que quiero decirte...<br>
+            pero primero tendrás que superar unas preguntas.
+        </p>
+
+        <button class="opcion" onclick="comenzar()">
+            COMENZAR
+        </button>
+    </div>
+
+
+    <!-- CUESTIONARIO -->
+    <div id="cuestionario" style="display:none;">
+
+        <div class="progreso" id="progreso"></div>
+
+        <div class="pregunta" id="pregunta"></div>
+
+        <div class="opciones" id="opciones"></div>
+
+        <button class="pista" onclick="mostrarPista()">
+            💡 Ver pista
+        </button>
+
+        <div id="textoPista"></div>
+
+        <div id="mensaje"></div>
+
+    </div>
+
+
+    <!-- FINAL -->
+    <div class="final" id="final">
+
+        <h2>LO LOGRASTE</h2>
+
+        <div class="frase">
+            TE INVITO A SALIR CONMIGO
+        </div>
+
+        <div class="datos">
+            📅 16/10/2026<br>
+            🕓 4:00 P.M<br>
+            👔 ROPA MEDIO FORMAL
+        </div>
+
+        <br>
+
+        <button class="opcion" onclick="mostrarPropuesta()">
+            CONTINUAR
+        </button>
+
+    </div>
+
+
+    <!-- PROPUESTA -->
+    <div class="propuesta" id="propuesta">
+
+        <h2>TENGO QUE PROPONERTE ALGO...</h2>
+
+        <p>
+            Y para descubrir qué es tendrás que esperar hasta ese día.
+        </p>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const preguntas = [
+
+    {
+        pregunta: "¿Quién dio el primer beso?",
+        opciones: [
+            "Julián",
+            "Camila",
+            "Los dos",
+            "Ninguno"
+        ],
+        correcta: 1,
+        pista: "Sabes cuál es la respuesta jajaja",
+        letra: "TE"
+    },
+
+    {
+        pregunta: "¿Cuántos gatos hay en la casa de Julián?",
+        opciones: [
+            "4",
+            "7",
+            "1",
+            "8"
+        ],
+        correcta: 1,
+        pista: "Más de 5 y menos de 10",
+        letra: "IN"
+    },
+
+    {
+        pregunta: "¿Qué musical vimos los dos y le encantó a Julián?",
+        opciones: [
+            "EPIC",
+            "Hadestown",
+            "Beetlejuice"
+        ],
+        correcta: 0,
+        pista: "Eso es mentiraa!!",
+        letra: "VI"
+    },
+
+    {
+        pregunta: "¿Qué anime fue en el que el opening me identificó?",
+        opciones: [
+            "DanDaDan",
+            "One Piece",
+            "Dragon Ball"
+        ],
+        correcta: 0,
+        pista: "Tú eres MOMO!",
+        letra: "TO"
+    },
+
+    {
+        pregunta: "¿Qué día te pedí ser mi novia?",
+        opciones: [
+            "16/09",
+            "16/08",
+            "17/09"
+        ],
+        correcta: 0,
+        pista: "Leydii cielo azul",
+        letra: "A"
+    },
+
+    {
+        pregunta: "¿Qué cosplay para el 31?",
+        opciones: [
+            "Simón y Betty",
+            "Otro",
+            "No lo sé pero sí haremos alguno pro"
+        ],
+        correcta: 2,
+        pista: "Esos también son opciones correctas pero aún no hemos confirmado uno",
+        letra: "SA"
+    },
+
+    {
+        pregunta: "¿Qué Chiikawas somos?",
+        opciones: [
+            "Rakko y Momonga",
+            "Hachiware y Chiikawa",
+            "Usagi y Momonga"
+        ],
+        correcta: 2,
+        pista: "Eso es mentiraa!!",
+        letra: "LI"
+    },
+
+    {
+        pregunta: "¿En cuántos bailes éramos pareja?",
+        opciones: [
+            "3",
+            "2",
+            "No sé"
+        ],
+        correcta: 0,
+        pista: "Técnicamente son pocos, 2 de esos los bailamos en la gira",
+        letra: "R"
+    },
+
+    {
+        pregunta: "¿Qué partidos de fútbol vimos?",
+        opciones: [
+            "Colombia",
+            "México",
+            "Ninguno"
+        ],
+        correcta: 0,
+        pista: "Eso es mentiraa!!",
+        letra: "CON"
+    },
+
+    {
+        pregunta: "¿Cuál es nuestro próximo evento juntos?",
+        opciones: [
+            "SOFA",
+            "Viaje a Japón",
+            "Salir a comer algo"
+        ],
+        correcta: 0,
+        pista: "Me refiero a más allá de Sogamoso",
+        letra: "MIGO"
+    }
+
+];
+
+
+let preguntaActual = 0;
+let letras = "";
+
+
+function comenzar() {
+
+    document.getElementById("inicio").style.display = "none";
+    document.getElementById("cuestionario").style.display = "block";
+
+    mostrarPregunta();
+}
+
+
+function mostrarPregunta() {
+
+    const pregunta = preguntas[preguntaActual];
+
+    document.getElementById("progreso").textContent =
+        "Pregunta " + (preguntaActual + 1) + " de " + preguntas.length;
+
+    document.getElementById("pregunta").textContent =
+        pregunta.pregunta;
+
+    const opciones = document.getElementById("opciones");
+
+    opciones.innerHTML = "";
+
+    pregunta.opciones.forEach((opcion, indice) => {
+
+        const boton = document.createElement("button");
+
+        boton.className = "opcion";
+
+        boton.textContent = opcion;
+
+        boton.onclick = function() {
+            responder(indice);
+        };
+
+        opciones.appendChild(boton);
+
+    });
+
+    document.getElementById("mensaje").textContent = "";
+
+    document.getElementById("textoPista").style.display = "none";
+
+    document.getElementById("textoPista").textContent = "";
+
+}
+
+
+function responder(indice) {
+
+    const pregunta = preguntas[preguntaActual];
+
+    const mensaje = document.getElementById("mensaje");
+
+    if (indice === pregunta.correcta) {
+
+        mensaje.className = "correcto";
+
+        mensaje.textContent = "✓ Correcto";
+
+        letras += pregunta.letra;
+
+        setTimeout(() => {
+
+            preguntaActual++;
+
+            if (preguntaActual >= preguntas.length) {
+
+                document.getElementById("cuestionario").style.display = "none";
+
+                document.getElementById("final").style.display = "block";
+
+            } else {
+
+                mostrarPregunta();
+
+            }
+
+        }, 700);
+
+    } else {
+
+        mensaje.className = "incorrecto";
+
+        mensaje.textContent =
+            "✗ Incorrecto. Intenta nuevamente.";
+
+    }
+
+}
+
+
+function mostrarPista() {
+
+    const texto = document.getElementById("textoPista");
+
+    texto.textContent =
+        "💡 " + preguntas[preguntaActual].pista;
+
+    texto.style.display = "block";
+
+}
+
+
+function mostrarPropuesta() {
+
+    document.getElementById("final").style.display = "none";
+
+    document.getElementById("propuesta").style.display = "block";
+
+}
+
+</script>
+
+</body>
+</html>
